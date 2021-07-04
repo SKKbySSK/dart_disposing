@@ -3,8 +3,13 @@ import 'dart:collection';
 
 import 'package:disposing/disposing.dart';
 
-class DisposableBag extends ListBase<Disposable> {
+class DisposableBag extends ListBase<Disposable> implements Disposable {
   final _disposables = <Disposable>[];
+  late final CallbackDisposable _cbDisposable;
+
+  DisposableBag() {
+    _cbDisposable = CallbackDisposable(_disposeInternal);
+  }
 
   @override
   int get length => _disposables.length;
@@ -16,27 +21,29 @@ class DisposableBag extends ListBase<Disposable> {
 
   @override
   void operator []=(int index, Disposable value) {
+    throwIfDisposed();
     _disposables[index] = value;
   }
 
   @override
   set length(int newLength) {
+    throwIfDisposed();
     _disposables.length = newLength;
   }
 
-  Future<void> dispose({bool concurrent = false}) async {
-    if (concurrent) {
-      await _concurrentDispose();
-      return;
-    }
+  @override
+  bool get isDisposing => _cbDisposable.isDisposing;
 
+  @override
+  bool get isDisposed => _cbDisposable.isDisposed;
+
+  Future<void> dispose() {
+    return _cbDisposable.dispose();
+  }
+
+  Future<void> _disposeInternal() async {
     for (final d in _disposables) {
       await d.dispose();
     }
-  }
-
-  Future<void> _concurrentDispose() async {
-    final fs = _disposables.map((e) => e.dispose());
-    await Future.wait(fs);
   }
 }

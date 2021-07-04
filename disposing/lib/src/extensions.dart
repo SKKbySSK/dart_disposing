@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:disposing/disposing.dart';
-import 'package:disposing/src/disposable_bag.dart';
+import 'package:disposing/src/exceptions.dart';
 
 extension DisposableBagExtension on DisposableBag {
   void addCallback(Future<void> callback()) {
@@ -9,14 +9,48 @@ extension DisposableBagExtension on DisposableBag {
   }
 }
 
+extension DisposableExtension on Disposable {
+  void disposeOn(DisposableBag bag) {
+    bag.add(this);
+  }
+
+  void throwIfDisposed([String? target]) {
+    if (isDisposing) {
+      throw DisposingException(this, target);
+    }
+
+    if (isDisposed) {
+      throw DisposedException(this, target);
+    }
+  }
+}
+
 extension StreamSubscriptionExtension<T> on StreamSubscription<T> {
-  void addTo(DisposableBag bag) {
-    bag.add(CallbackDisposable(this.cancel));
+  void disposeOn(DisposableBag bag) {
+    bag.add(this.asDisposable());
+  }
+
+  ValueDisposable<StreamSubscription<T>> asDisposable() {
+    return ValueDisposable(this, this.cancel);
   }
 }
 
 extension StreamControllerExtension<T> on StreamController<T> {
-  void addTo(DisposableBag bag) {
-    bag.add(CallbackDisposable(this.close));
+  void disposeOn(DisposableBag bag) {
+    bag.add(this.asDisposable());
+  }
+
+  ValueDisposable<StreamController<T>> asDisposable() {
+    return ValueDisposable(this, this.close);
+  }
+}
+
+extension TimerExtension on Timer {
+  void disposeOn(DisposableBag bag) {
+    bag.add(this.asDisposable());
+  }
+
+  ValueDisposable<Timer> asDisposable() {
+    return ValueDisposable(this, () async => this.cancel());
   }
 }

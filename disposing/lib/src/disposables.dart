@@ -4,6 +4,23 @@ abstract class Disposable {
   bool get isDisposing;
   bool get isDisposed;
   Future<void> dispose();
+
+  @override
+  String toString() {
+    var text = '${this.runtimeType.toString()}';
+
+    if (isDisposing || isDisposed) {
+      text += ' (';
+      if (isDisposing) {
+        text += 'disposing';
+      } else {
+        text += 'disposed';
+      }
+      text += ')';
+    }
+
+    return text;
+  }
 }
 
 class CallbackDisposable extends Disposable {
@@ -34,5 +51,31 @@ class CallbackDisposable extends Disposable {
     } finally {
       _isDisposing = false;
     }
+  }
+}
+
+class ValueDisposable<T> extends CallbackDisposable {
+  ValueDisposable(
+    this.value,
+    Future<void> Function() _callback,
+  ) : super(_callback);
+
+  final T value;
+
+  @override
+  String toString() {
+    var text = '${this.runtimeType.toString()} ($value';
+
+    if (isDisposing || isDisposed) {
+      if (isDisposing) {
+        text += ', disposing';
+      } else {
+        text += ', disposed';
+      }
+    }
+
+    text += ')';
+
+    return text;
   }
 }
