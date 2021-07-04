@@ -1,3 +1,7 @@
+## 1.0.0+3
+
+- Update README
+
 ## 1.0.0+2
 
 - Fix DisposeBag

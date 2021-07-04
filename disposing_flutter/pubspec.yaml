@@ -2,7 +2,7 @@ name: disposing_flutter
 description: disposing package for flutter.
 repository: https://github.com/SKKbySSK/dart_disposing/tree/master/disposing_flutter
 
-version: 1.0.0+4
+version: 1.0.0+5
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  disposing: ^1.0.0+2
+  disposing: ^1.0.0+3
 
 dev_dependencies:
   flutter_test:
