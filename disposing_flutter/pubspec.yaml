@@ -1,5 +1,6 @@
 name: disposing_flutter
 description: A new flutter module project.
+repository: https://github.com/SKKbySSK/dart_disposing
 
 version: 1.0.0
 
@@ -9,6 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  disposing: ^1.0.0
 
 dev_dependencies:
   flutter_test:
