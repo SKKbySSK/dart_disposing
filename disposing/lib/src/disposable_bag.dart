@@ -1,9 +1,9 @@
 import 'dart:async';
-import 'dart:collection';
 
 import 'package:disposing/disposing.dart';
+import 'package:quiver/collection.dart';
 
-class DisposableBag extends ListBase<Disposable> implements Disposable {
+class DisposableBag extends DelegatingList<Disposable> implements Disposable {
   final _disposables = <Disposable>[];
   late final CallbackDisposable _cbDisposable;
 
@@ -12,24 +12,7 @@ class DisposableBag extends ListBase<Disposable> implements Disposable {
   }
 
   @override
-  int get length => _disposables.length;
-
-  @override
-  Disposable operator [](int index) {
-    return _disposables[index];
-  }
-
-  @override
-  void operator []=(int index, Disposable value) {
-    throwIfDisposed();
-    _disposables[index] = value;
-  }
-
-  @override
-  set length(int newLength) {
-    throwIfDisposed();
-    _disposables.length = newLength;
-  }
+  List<Disposable> get delegate => _disposables;
 
   @override
   bool get isDisposing => _cbDisposable.isDisposing;

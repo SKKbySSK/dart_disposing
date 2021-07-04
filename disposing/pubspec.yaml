@@ -2,10 +2,13 @@ name: disposing
 description: Disposing is a flutter package adds dispose method on many classes.
 repository: https://github.com/SKKbySSK/dart_disposing/tree/master/disposing
 
-version: 1.0.0+1
+version: 1.0.0+2
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  quiver: ^3.0.1
 
 dev_dependencies:
   test: ^1.17.9
