@@ -14,7 +14,7 @@ void main() async {
       notifier.notifyListeners();
       expect(callCount, 1);
 
-      await disp.dispose();
+      disp.dispose();
       notifier.notifyListeners();
 
       expect(callCount, 1);

@@ -2,18 +2,18 @@ import 'package:disposing/disposing.dart';
 import 'package:flutter/foundation.dart';
 
 extension LitenableExtension on Listenable {
-  AsyncDisposable addDisposableListener(VoidCallback callback) {
+  SyncDisposable addDisposableListener(VoidCallback callback) {
     addListener(callback);
-    return AsyncCallbackDisposable(() async => removeListener(callback));
+    return SyncCallbackDisposable(() => removeListener(callback));
   }
 }
 
 extension ChangeNotifierExtension on ChangeNotifier {
-  void disposeOn(AsyncDisposableBag bag) {
+  void disposeOn(SyncDisposableBag bag) {
     bag.add(this.asDisposable());
   }
 
-  AsyncValueDisposable<T> asDisposable<T extends ChangeNotifier>() {
-    return AsyncValueDisposable<T>(this as T, () async => dispose());
+  SyncValueDisposable<T> asDisposable<T extends ChangeNotifier>() {
+    return SyncValueDisposable<T>(this as T, dispose);
   }
 }

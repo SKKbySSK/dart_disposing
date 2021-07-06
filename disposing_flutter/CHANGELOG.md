@@ -1,3 +1,8 @@
+## 1.0.1
+
+- Add DisposableBagChangeNotifierMixin
+- Update disposing to 1.0.1
+
 ## 1.0.0+5
 
 - Update README

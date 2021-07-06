@@ -1,7 +1,7 @@
 import 'package:disposing/disposing.dart';
 import 'package:flutter/material.dart';
 
-mixin DisposableBagStateMixin<T extends StatefulWidget> on State<T> {
+mixin DisposableBagChangeNotifierMixin on ChangeNotifier {
   final _syncBag = SyncDisposableBag();
   final _asyncBag = AsyncDisposableBag();
 
