@@ -9,13 +9,13 @@ Add dependencies to your pubspec.yaml
 ### Dart only
 ```yaml
 dependencies:
-  disposing: ^1.0.2
+  disposing: ^1.0.2+1
 ```
 
 ### Flutter
 ```yaml
 dependencies:
-  flutter_disposing: ^1.0.2
+  flutter_disposing: ^1.0.2+1
 ```
 
 ## How to Use
@@ -88,9 +88,9 @@ class _ExampleWidgetState extends State<ExampleWidget>
 
   @override
   void initState() {
-    autoDispose(Timer.periodic(Duration(seconds: 1), (t) => {}));
+    autoDispose(Timer.periodic(Duration(seconds: 1), (t) => {}).asDisposable());
     autoDispose(controller.addDisposableListener(() => print(controller.text)));
-    autoDispose(controller);
+    autoDispose(controller.asDisposable());
     super.initState();
   }
 

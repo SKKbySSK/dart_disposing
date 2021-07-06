@@ -1,3 +1,7 @@
+## 1.0.2+1
+
+- Update README
+
 ## 1.0.2
 
 - Split Disposable to AsyncDisposable & SyncDisposable
