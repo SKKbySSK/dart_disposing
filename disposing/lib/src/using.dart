@@ -9,13 +9,13 @@ import 'package:disposing/src/disposables/sync_disposables.dart';
 typedef UsingBody<T, R> = FutureOr<R> Function(T value);
 
 Future<R> using<T extends Disposable, R>(T value, UsingBody<T, R> body) async {
-  AsyncDisposable _disp;
+  AsyncDisposable disp;
   if (value is SyncDisposable) {
     value.throwIfNotAvailable();
-    _disp = value.asAsync();
+    disp = value.asAsync();
   } else if (value is AsyncDisposable) {
     value.throwIfNotAvailable();
-    _disp = value;
+    disp = value;
   } else {
     throw UnknownDisposableException(value);
   }
@@ -23,7 +23,7 @@ Future<R> using<T extends Disposable, R>(T value, UsingBody<T, R> body) async {
   try {
     return await body(value);
   } finally {
-    await _disp.dispose();
+    await disp.dispose();
   }
 }
 

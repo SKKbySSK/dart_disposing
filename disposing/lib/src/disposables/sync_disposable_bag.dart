@@ -1,29 +1,57 @@
-import 'package:disposing/src/disposables/disposable_bag_base.dart';
+import 'package:disposing/disposing.dart';
 import 'package:disposing/src/disposables/sync_disposables.dart';
 
-class SyncDisposableBag extends DisposableBagBase<SyncDisposable>
+class SyncDisposableBag extends Iterable<SyncDisposable>
     implements SyncDisposable {
-  SyncCallbackDisposable? _disposable;
+  late final SyncCallbackDisposable _disposable;
+  final _disposables = <SyncDisposable>[];
 
-  @override
-  bool get isDisposed => _disposable?.isDisposed ?? false;
-
-  void dispose() {
-    final disposables = toList();
-    clear();
-    final disp = SyncCallbackDisposable(() => _disposeInternal(disposables));
-
-    if (_disposable != null) {
-      return;
-    }
-    _disposable = disp;
-
-    disp.dispose();
+  SyncDisposableBag() {
+    _disposable = SyncCallbackDisposable(_disposeInternal);
   }
 
-  void _disposeInternal(List<SyncDisposable> items) {
-    for (final d in this) {
+  @override
+  bool get isDisposed => _disposable.isDisposed;
+
+  int get length => _disposables.length;
+
+  @override
+  Iterator<SyncDisposable> get iterator => _disposables.iterator;
+
+  @override
+  void throwIfNotAvailable([String? target]) {
+    _disposable.throwIfNotAvailable(target);
+  }
+
+  void add(SyncDisposable disposable) {
+    disposable.throwIfNotAvailable();
+    throwIfNotAvailable('add');
+    _disposables.add(disposable);
+  }
+
+  void remove(SyncDisposable disposable) {
+    throwIfNotAvailable('remove');
+    _disposables.remove(disposable);
+  }
+
+  void removeAt(int index) {
+    throwIfNotAvailable('removeAt');
+    _disposables.removeAt(index);
+  }
+
+  void clear() {
+    throwIfNotAvailable('clear');
+    _disposables.clear();
+  }
+
+  void dispose() {
+    _disposable.dispose();
+  }
+
+  void _disposeInternal() {
+    for (final d in _disposables) {
       d.dispose();
     }
+    _disposables.clear();
   }
 }

@@ -1,6 +1,7 @@
-## 1.0.1
+## 1.0.2
 
 - Split Disposable to AsyncDisposable & SyncDisposable
+- Add SyncDisposableBag
 - Remove quiver dependency
 
 ## 1.0.0+3

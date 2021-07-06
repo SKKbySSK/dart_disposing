@@ -9,13 +9,13 @@ Add dependencies to your pubspec.yaml
 ### Dart only
 ```yaml
 dependencies:
-  disposing: ^1.0.1
+  disposing: ^1.0.2
 ```
 
 ### Flutter
 ```yaml
 dependencies:
-  flutter_disposing: ^1.0.0+6
+  flutter_disposing: ^1.0.2
 ```
 
 ## How to Use
@@ -34,7 +34,7 @@ final streamDisp = stream.listen((v) => {}).asDisposable();
 final timerDisp = timer.asDisposable();
 ```
 
-3. (Optional) Add disposable instances to DisposableBag
+3. (Optional) Add disposable instances to SyncDisposableBag
 
 ```dart
 final bag = DisposableBag();
@@ -53,7 +53,7 @@ timer.disposeOn(bag);
 ```dart
 // Without DisposeBag
 await streamDisp.dispose();
-await timerDisp.dispose();
+timerDisp.dispose();
 
 // With DisposeBag
 await bag.dispose();
@@ -88,8 +88,9 @@ class _ExampleWidgetState extends State<ExampleWidget>
 
   @override
   void initState() {
-    Timer.periodic(Duration(seconds: 1), (t) => {}).disposeOn(disposeBag);
-    controller.addDisposableListener(() => print(controller.text)).disposeOn(disposeBag);
+    autoDispose(Timer.periodic(Duration(seconds: 1), (t) => {}));
+    autoDispose(controller.addDisposableListener(() => print(controller.text)));
+    autoDispose(controller);
     super.initState();
   }
 

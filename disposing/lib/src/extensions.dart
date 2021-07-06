@@ -2,10 +2,9 @@ import 'dart:async';
 
 import 'package:disposing/disposing.dart';
 import 'package:disposing/src/disposables/async_disposables.dart';
-import 'package:disposing/src/disposables/sync_disposable_bag.dart';
 import 'package:disposing/src/disposables/sync_disposables.dart';
 
-extension DisposableBagExtension on AsyncDisposableBag {
+extension DisposableBagExtension on DisposableBag {
   void addCallback(Future<void> callback()) {
     add(AsyncCallbackDisposable(callback));
   }
@@ -22,13 +21,13 @@ extension SyncDisposableExtension on SyncDisposable {
 }
 
 extension AsyncDisposableExtension on AsyncDisposable {
-  void disposeOn(AsyncDisposableBag bag) {
+  void disposeOn(DisposableBag bag) {
     bag.add(this);
   }
 }
 
 extension StreamSubscriptionExtension<T> on StreamSubscription<T> {
-  void disposeOn(AsyncDisposableBag bag) {
+  void disposeOn(DisposableBag bag) {
     bag.add(this.asDisposable());
   }
 
@@ -38,7 +37,7 @@ extension StreamSubscriptionExtension<T> on StreamSubscription<T> {
 }
 
 extension StreamControllerExtension<T> on StreamController<T> {
-  void disposeOn(AsyncDisposableBag bag) {
+  void disposeOn(DisposableBag bag) {
     bag.add(this.asDisposable());
   }
 
@@ -48,7 +47,7 @@ extension StreamControllerExtension<T> on StreamController<T> {
 }
 
 extension TimerExtension on Timer {
-  void disposeOn(SyncDisposableBag bag) {
+  void disposeOn(DisposableBag bag) {
     bag.add(this.asDisposable());
   }
 
