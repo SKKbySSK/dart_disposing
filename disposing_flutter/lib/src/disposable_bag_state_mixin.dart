@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 mixin DisposableBagStateMixin<T extends StatefulWidget> on State<T> {
   final _syncBag = SyncDisposableBag();
-  final _asyncBag = AsyncDisposableBag();
+  final _asyncBag = DisposableBag();
 
   @mustCallSuper
   @override

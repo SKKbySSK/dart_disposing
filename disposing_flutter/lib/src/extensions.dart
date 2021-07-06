@@ -9,7 +9,7 @@ extension LitenableExtension on Listenable {
 }
 
 extension ChangeNotifierExtension on ChangeNotifier {
-  void disposeOn(SyncDisposableBag bag) {
+  void disposeOn(DisposableBag bag) {
     bag.add(this.asDisposable());
   }
 
