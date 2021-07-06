@@ -1,8 +1,8 @@
-import 'dart:async';
+import 'package:disposing/disposing.dart';
+import 'package:disposing/src/disposable.dart';
 
-abstract class Disposable {
+abstract class AsyncDisposable extends Disposable {
   bool get isDisposing;
-  bool get isDisposed;
   Future<void> dispose();
 
   @override
@@ -21,10 +21,21 @@ abstract class Disposable {
 
     return text;
   }
+
+  @override
+  void throwIfNotAvailable([String? target]) {
+    if (isDisposing) {
+      throw DisposingException(this, target);
+    }
+
+    if (isDisposed) {
+      throw DisposedException(this, target);
+    }
+  }
 }
 
-class CallbackDisposable extends Disposable {
-  CallbackDisposable(this._callback);
+class AsyncCallbackDisposable extends AsyncDisposable {
+  AsyncCallbackDisposable(this._callback);
 
   final Future<void> Function() _callback;
   bool _isDisposing = false;
@@ -46,16 +57,14 @@ class CallbackDisposable extends Disposable {
     try {
       await _callback();
       _isDisposed = true;
-    } catch (_) {
-      rethrow;
     } finally {
       _isDisposing = false;
     }
   }
 }
 
-class ValueDisposable<T> extends CallbackDisposable {
-  ValueDisposable(
+class AsyncValueDisposable<T> extends AsyncCallbackDisposable {
+  AsyncValueDisposable(
     this.value,
     Future<void> Function() _callback,
   ) : super(_callback);

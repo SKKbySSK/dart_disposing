@@ -1,3 +1,8 @@
+## 1.0.1
+
+- Split Disposable to AsyncDisposable & SyncDisposable
+- Remove quiver dependency
+
 ## 1.0.0+3
 
 - Update README

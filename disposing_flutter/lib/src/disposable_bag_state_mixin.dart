@@ -1,8 +1,7 @@
-import 'package:disposing/disposing.dart';
 import 'package:flutter/material.dart';
 
 mixin DisposableBagStateMixin<T extends StatefulWidget> on State<T> {
-  final disposeBag = DisposableBag();
+  final disposeBag = AsyncDisposableBag();
 
   @mustCallSuper
   void dispose() {

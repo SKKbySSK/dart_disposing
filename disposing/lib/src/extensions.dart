@@ -1,56 +1,58 @@
 import 'dart:async';
 
 import 'package:disposing/disposing.dart';
-import 'package:disposing/src/exceptions.dart';
+import 'package:disposing/src/disposables/async_disposables.dart';
+import 'package:disposing/src/disposables/sync_disposable_bag.dart';
+import 'package:disposing/src/disposables/sync_disposables.dart';
 
-extension DisposableBagExtension on DisposableBag {
+extension DisposableBagExtension on AsyncDisposableBag {
   void addCallback(Future<void> callback()) {
-    add(CallbackDisposable(callback));
+    add(AsyncCallbackDisposable(callback));
   }
 }
 
-extension DisposableExtension on Disposable {
-  void disposeOn(DisposableBag bag) {
+extension SyncDisposableExtension on SyncDisposable {
+  void disposeOn(SyncDisposableBag bag) {
     bag.add(this);
   }
 
-  void throwIfDisposed([String? target]) {
-    if (isDisposing) {
-      throw DisposingException(this, target);
-    }
+  AsyncDisposable asAsync() {
+    return AsyncCallbackDisposable(() async => dispose());
+  }
+}
 
-    if (isDisposed) {
-      throw DisposedException(this, target);
-    }
+extension AsyncDisposableExtension on AsyncDisposable {
+  void disposeOn(AsyncDisposableBag bag) {
+    bag.add(this);
   }
 }
 
 extension StreamSubscriptionExtension<T> on StreamSubscription<T> {
-  void disposeOn(DisposableBag bag) {
+  void disposeOn(AsyncDisposableBag bag) {
     bag.add(this.asDisposable());
   }
 
-  ValueDisposable<StreamSubscription<T>> asDisposable() {
-    return ValueDisposable(this, this.cancel);
+  AsyncValueDisposable<StreamSubscription<T>> asDisposable() {
+    return AsyncValueDisposable(this, this.cancel);
   }
 }
 
 extension StreamControllerExtension<T> on StreamController<T> {
-  void disposeOn(DisposableBag bag) {
+  void disposeOn(AsyncDisposableBag bag) {
     bag.add(this.asDisposable());
   }
 
-  ValueDisposable<StreamController<T>> asDisposable() {
-    return ValueDisposable(this, this.close);
+  AsyncValueDisposable<StreamController<T>> asDisposable() {
+    return AsyncValueDisposable(this, this.close);
   }
 }
 
 extension TimerExtension on Timer {
-  void disposeOn(DisposableBag bag) {
+  void disposeOn(SyncDisposableBag bag) {
     bag.add(this.asDisposable());
   }
 
-  ValueDisposable<Timer> asDisposable() {
-    return ValueDisposable(this, () async => this.cancel());
+  SyncValueDisposable<Timer> asDisposable() {
+    return SyncValueDisposable(this, this.cancel);
   }
 }

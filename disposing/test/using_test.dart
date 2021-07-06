@@ -6,14 +6,14 @@ void main() async {
   group('using', () {
     test('dispose after using', () async {
       final disp =
-          CallbackDisposable(() => Future.delayed(Duration(milliseconds: 100)));
+          AsyncCallbackDisposable(() => Future.delayed(Duration(milliseconds: 100)));
       await using(disp, (_) async {});
       expect(disp.isDisposed, true);
     });
 
     test('throw if disposed', () async {
       final disp =
-          CallbackDisposable(() => Future.delayed(Duration(milliseconds: 100)));
+          AsyncCallbackDisposable(() => Future.delayed(Duration(milliseconds: 100)));
       final dispFuture = disp.dispose();
 
       expect(
@@ -32,20 +32,20 @@ void main() async {
     const value = 'TEST_VALUE';
 
     test('correct argument', () async {
-      final disp = ValueDisposable(value, () async => {});
+      final disp = AsyncValueDisposable(value, () async => {});
       await usingValue(disp, (actual) async {
         expect(actual, value);
       });
     });
 
     test('dispose after using', () async {
-      final disp = ValueDisposable(value, () async => {});
+      final disp = AsyncValueDisposable(value, () async => {});
       await usingValue(disp, (_) async {});
       expect(disp.isDisposed, true);
     });
 
     test('throw if disposed', () async {
-      final disp = ValueDisposable(value, () async => {});
+      final disp = AsyncValueDisposable(value, () async => {});
       final dispFuture = disp.dispose();
 
       expect(
