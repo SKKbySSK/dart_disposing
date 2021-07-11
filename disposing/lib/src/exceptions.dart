@@ -52,3 +52,20 @@ class UnknownDisposableException implements Exception {
     return message;
   }
 }
+
+class BagAggregateException implements Exception {
+  BagAggregateException(this.exceptions);
+  final Map<Disposable, Object> exceptions;
+
+  @override
+  String toString() {
+    var lines = 'One or more exceptions has been occured while disposing bag\n';
+    var i = 0;
+    for (final ex in exceptions.entries) {
+      lines += '$i ${ex.key}\n${ex.value}\n';
+      i++;
+    }
+
+    return lines;
+  }
+}

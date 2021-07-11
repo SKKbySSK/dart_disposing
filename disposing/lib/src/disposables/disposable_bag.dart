@@ -88,9 +88,19 @@ class DisposableBag extends Iterable<Disposable> implements AsyncDisposable {
   }
 
   Future<void> _disposeInternal() async {
+    final Map<Disposable, Object> _exs = {};
     for (final d in _disposables) {
-      await d.dispose();
+      try {
+        await d.dispose();
+      } on Object catch (e) {
+        _exs[d.disposable] = e;
+      }
     }
+
     _disposables.clear();
+
+    if (_exs.length > 0) {
+      throw BagAggregateException(_exs);
+    }
   }
 }

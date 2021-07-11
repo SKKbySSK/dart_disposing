@@ -49,9 +49,19 @@ class SyncDisposableBag extends Iterable<SyncDisposable>
   }
 
   void _disposeInternal() {
+    final Map<Disposable, Object> _exs = {};
     for (final d in _disposables) {
-      d.dispose();
+      try {
+        d.dispose();
+      } on Object catch (e) {
+        _exs[d] = e;
+      }
     }
+
     _disposables.clear();
+
+    if (_exs.length > 0) {
+      throw BagAggregateException(_exs);
+    }
   }
 }
