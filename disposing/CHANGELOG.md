@@ -1,3 +1,7 @@
+## 1.0.3
+
+- DisposableBag can throw BagAggregateException
+
 ## 1.0.2+1
 
 - Update README
