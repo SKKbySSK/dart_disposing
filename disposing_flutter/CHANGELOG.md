@@ -1,3 +1,7 @@
+## 1.0.3
+
+- DisposableBagStateMixin will dispose ChangeNotifier late automatically
+
 ## 1.0.2+1
 
 - Update README
