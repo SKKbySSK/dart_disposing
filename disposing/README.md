@@ -9,13 +9,13 @@ Add dependencies to your pubspec.yaml
 ### Dart only
 ```yaml
 dependencies:
-  disposing: ^1.0.3
+  disposing: ^1.0.3+1
 ```
 
 ### Flutter
 ```yaml
 dependencies:
-  flutter_disposing: ^1.0.3
+  flutter_disposing: ^1.0.3+1
 ```
 
 ## How to Use

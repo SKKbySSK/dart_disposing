@@ -11,7 +11,11 @@ extension DisposableBagExtension on DisposableBag {
 }
 
 extension SyncDisposableExtension on SyncDisposable {
-  void disposeOn(SyncDisposableBag bag) {
+  void syncDisposeOn(SyncDisposableBag bag) {
+    bag.add(this);
+  }
+
+  void disposeOn(DisposableBag bag) {
     bag.add(this);
   }
 
@@ -47,6 +51,10 @@ extension StreamControllerExtension<T> on StreamController<T> {
 }
 
 extension TimerExtension on Timer {
+  void syncDisposeOn(SyncDisposableBag bag) {
+    bag.add(this.asDisposable());
+  }
+
   void disposeOn(DisposableBag bag) {
     bag.add(this.asDisposable());
   }

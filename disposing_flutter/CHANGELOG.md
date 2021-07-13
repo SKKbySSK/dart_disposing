@@ -1,3 +1,7 @@
+## 1.0.3+1
+
+- Add syncDisposeOn
+
 ## 1.0.3
 
 - DisposableBagStateMixin will dispose ChangeNotifier late automatically
